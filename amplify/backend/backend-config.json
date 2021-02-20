@@ -1,0 +1,10 @@
+{
+  "auth": {
+    "solarinvpocf51faf07": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
+  }
+}
