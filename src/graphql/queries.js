@@ -10,6 +10,7 @@ export const getInventoryItem = /* GraphQL */ `
       description
       brand
       category
+      _version
       createdAt
       updatedAt
     }
@@ -29,6 +30,7 @@ export const listInventoryItems = /* GraphQL */ `
         description
         brand
         category
+        _version
         createdAt
         updatedAt
       }

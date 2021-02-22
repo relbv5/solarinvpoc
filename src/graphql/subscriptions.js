@@ -10,6 +10,7 @@ export const onCreateInventoryItem = /* GraphQL */ `
       description
       brand
       category
+      _version
       createdAt
       updatedAt
     }
@@ -24,6 +25,7 @@ export const onUpdateInventoryItem = /* GraphQL */ `
       description
       brand
       category
+      _version
       createdAt
       updatedAt
     }
@@ -38,6 +40,7 @@ export const onDeleteInventoryItem = /* GraphQL */ `
       description
       brand
       category
+      _version
       createdAt
       updatedAt
     }

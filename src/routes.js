@@ -39,6 +39,7 @@ const Users = React.lazy(() => import('./views/users/Users'));
 const User = React.lazy(() => import('./views/users/User'));
 const Inventory = React.lazy(() => import('./views/inventory/Inventory'));
 const InventoryItem = React.lazy(() => import('./views/inventory/InventoryItem'));
+const NewInventoryItem = React.lazy(() => import('./views/inventory/NewInventoryItem'));
 const Calendar = React.lazy(() => import('./views/calendar/Calendar'));
 
 
@@ -85,7 +86,8 @@ const routes = [
   { path: '/inventory', exact: true, name: 'Inventory', component: Inventory },
   { path: '/calendar', exact: true, name: 'Calendar', component: Calendar },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
-  { path: '/inventory/:id', exact: true, name: 'Inventory Item Details', component: InventoryItem }
+  { path: '/inventory/:id', exact: true, name: 'Inventory Item Details', component: InventoryItem },
+  { path: '/newinventoryitem', exact: true, name: 'New Inventory Item', component: NewInventoryItem },
 ];
 
 export default routes;

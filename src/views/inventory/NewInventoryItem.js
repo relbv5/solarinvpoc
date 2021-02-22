@@ -1,75 +1,56 @@
-import React, { useState, useEffect } from 'react'
-import { CCard, CCardBody, CCardHeader, CCol, CRow } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
+import React, { useState, useEffect } from 'react';
 import {
   CButton,
+  CCard,
+  CCardBody,
   CCardFooter,
+  CCardHeader,
+  CCol,
   CForm,
   CFormGroup,
+  CFormText,
   CInput,
-  CLabel
+  CLabel,
+  CRow
 } from '@coreui/react'
-
+import CIcon from '@coreui/icons-react'
 import { API } from 'aws-amplify';
-import * as queries from '../../graphql/queries';
-import { updateInventoryItem as updateInventoryItemMutation, deleteInventoryItem as deleteInventoryItemMutation } from '../../graphql/mutations';
+import { createInventoryItem as createInventoryItemMutation } from '../../graphql/mutations';
+
 import { useHistory } from "react-router-dom";
 
-import { Modal } from '@coreui/coreui'
+import { Modal } from '@coreui/coreui';
 
-const InventoryItem = ({ match }) => {
+const initialFormState = { name: '', quantity: 0, description: '', brand: '', category: '' }
+
+const NewInventoryItem = () => {
 
   const [inventoryItem, setInventoryItem] = useState([]);
+  const [formData, setFormData] = useState(initialFormState);
   const history = useHistory();
 
-  useEffect(() => {
-    fetchInventoryItem(match.params.id);
-  }, []);
-
-  async function fetchInventoryItem(id) {
-    const apiData = await API.graphql({ query: queries.getInventoryItem, variables: { id: id } });
-    console.log("Current version: " + apiData.data.getInventoryItem._version);
-    setInventoryItem(apiData.data.getInventoryItem);
-    console.log("Form State: " + apiData.data.getInventoryItem.brand);
-  }
-
-  async function updateInventoryItem() {
+  async function createInventoryItem() {
+    if (!formData.name || !formData.description) return;
 
     try {
-      await API.graphql({
-        query: updateInventoryItemMutation, variables: {
-          input: {
-            id: inventoryItem.id,
-            name: inventoryItem.name,
-            quantity: inventoryItem.quantity,
-            description: inventoryItem.description,
-            brand: inventoryItem.brand,
-            category: inventoryItem.category,
-            _version: inventoryItem.version
-          }
-        }
-      });
-      showConfirmation("Update Successful", "'" + inventoryItem.name + "' was updated successfully")
+      setInventoryItem([...inventoryItem, formData]);
+      await API.graphql({ query: createInventoryItemMutation, variables: { input: formData } });
+
+      showConfirmation("Add Successful", "'" + formData.name + "' was added successfully")
     } catch (e) {
       console.log(e);
     }
 
+    setFormData(initialFormState);
   }
 
-  async function deleteInventoryItem() {
-
-    try {
-        await API.graphql({ query: deleteInventoryItemMutation, variables: { input: { id: inventoryItem.id } } });
-        showConfirmation("Delete Successful", "'" + inventoryItem.name + "' was deleted successfully")
-    } catch (e) {
-      console.log(e);
-    }
-
+  function resetForm() {
+    setFormData(initialFormState);
   }
 
   function showConfirmation(title, text) {
     var modalElement = document.getElementById('confirmationModal');
-    modalElement.addEventListener("hidden.coreui.modal", function(){  history.push("/inventory"); });
+    modalElement.addEventListener("hidden.coreui.modal", function () { history.push("/inventory"); });
     var confirmationModal = new Modal(modalElement);
     document.getElementById('confirmationModalLabel').innerText = title;
     document.getElementById('confirmationModalText').innerText = text;
@@ -78,7 +59,6 @@ const InventoryItem = ({ match }) => {
 
   return (
     <>
-
       <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -102,8 +82,8 @@ const InventoryItem = ({ match }) => {
         <CCol xs="12" md="6">
           <CCard>
             <CCardHeader>
-              Inventory Item
-          </CCardHeader>
+              New Inventory Item
+            </CCardHeader>
             <CCardBody>
               <CForm action="" method="post" className="form-horizontal">
                 <CFormGroup row>
@@ -112,7 +92,8 @@ const InventoryItem = ({ match }) => {
                   </CCol>
                   <CCol xs="12" md="9">
                     <CInput type="name" id="name" name="name" placeholder="Enter Name..." autoComplete="name"
-                      onChange={e => setInventoryItem({ ...inventoryItem, 'name': e.target.value })} value={inventoryItem.name} />
+                      onChange={e => setFormData({ ...formData, 'name': e.target.value })} value={formData.name} />
+                    <CFormText className="help-block">Please enter item name</CFormText>
                   </CCol>
                 </CFormGroup>
                 <CFormGroup row>
@@ -121,7 +102,8 @@ const InventoryItem = ({ match }) => {
                   </CCol>
                   <CCol xs="12" md="9">
                     <CInput type="quantity" id="quantity" name="quantity" placeholder="Enter Quantity..." autoComplete="quantity"
-                      onChange={e => setInventoryItem({ ...inventoryItem, 'quantity': e.target.value })} value={inventoryItem.quantity} />
+                      onChange={e => setFormData({ ...formData, 'quantity': e.target.value })} value={formData.quantity} />
+                    <CFormText className="help-block">Please enter quantity</CFormText>
                   </CCol>
                 </CFormGroup>
                 <CFormGroup row>
@@ -130,7 +112,8 @@ const InventoryItem = ({ match }) => {
                   </CCol>
                   <CCol xs="12" md="9">
                     <CInput type="description" id="description" name="description" placeholder="Enter Description..." autoComplete="description"
-                      onChange={e => setInventoryItem({ ...inventoryItem, 'description': e.target.value })} value={inventoryItem.description} />
+                      onChange={e => setFormData({ ...formData, 'description': e.target.value })} value={formData.description} />
+                    <CFormText className="help-block">Please enter description</CFormText>
                   </CCol>
                 </CFormGroup>
                 <CFormGroup row>
@@ -139,7 +122,8 @@ const InventoryItem = ({ match }) => {
                   </CCol>
                   <CCol xs="12" md="9">
                     <CInput type="brand" id="brand" name="brand" placeholder="Enter Brand..." autoComplete="brand"
-                      onChange={e => setInventoryItem({ ...inventoryItem, 'brand': e.target.value })} value={inventoryItem.brand} />
+                      onChange={e => setFormData({ ...formData, 'brand': e.target.value })} value={formData.brand} />
+                    <CFormText className="help-block">Please enter brand</CFormText>
                   </CCol>
                 </CFormGroup>
                 <CFormGroup row>
@@ -148,14 +132,15 @@ const InventoryItem = ({ match }) => {
                   </CCol>
                   <CCol xs="12" md="9">
                     <CInput type="category" id="category" name="category" placeholder="Enter Category..." autoComplete="category"
-                      onChange={e => setInventoryItem({ ...inventoryItem, 'category': e.target.value })} value={inventoryItem.category} />
+                      onChange={e => setFormData({ ...formData, 'category': e.target.value })} value={formData.category} />
+                    <CFormText className="help-block">Please enter category</CFormText>
                   </CCol>
                 </CFormGroup>
               </CForm>
             </CCardBody>
             <CCardFooter>
-              <CButton type="update" size="sm" color="primary" onClick={() => updateInventoryItem()}><CIcon name="cil-scrubber" /> Update</CButton>
-              <CButton type="delete" size="sm" color="danger" onClick={() => deleteInventoryItem()} ><CIcon name="cil-ban" /> Delete</CButton>
+              <CButton type="submit" size="sm" color="primary" onClick={createInventoryItem}><CIcon name="cil-scrubber" /> Submit</CButton>
+              <CButton type="reset" size="sm" color="danger" onClick={resetForm}><CIcon name="cil-ban" /> Reset</CButton>
             </CCardFooter>
           </CCard>
 
@@ -165,4 +150,4 @@ const InventoryItem = ({ match }) => {
   )
 }
 
-export default InventoryItem
+export default NewInventoryItem

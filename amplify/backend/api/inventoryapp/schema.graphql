@@ -5,4 +5,5 @@ type InventoryItem @model {
   description: String
   brand: String
   category: String
+  _version: Int
 }

@@ -13,6 +13,7 @@ export const createInventoryItem = /* GraphQL */ `
       description
       brand
       category
+      _version
       createdAt
       updatedAt
     }
@@ -30,6 +31,7 @@ export const updateInventoryItem = /* GraphQL */ `
       description
       brand
       category
+      _version
       createdAt
       updatedAt
     }
@@ -47,6 +49,7 @@ export const deleteInventoryItem = /* GraphQL */ `
       description
       brand
       category
+      _version
       createdAt
       updatedAt
     }
