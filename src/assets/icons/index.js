@@ -2,7 +2,7 @@ import { sygnet } from './sygnet'
 import { logo } from './logo'
 import { logoNegative } from './logo-negative'
 import { sunLogo } from './sun-logo'
-
+import {hctsLogo} from './hcts-logo'
 import {
   cibSkype,
   cibFacebook,
@@ -136,7 +136,8 @@ export const icons = Object.assign({}, {
   sygnet,
   logo,
   logoNegative,
-  sunLogo
+  sunLogo,
+  hctsLogo
 }, {
   cilAlignCenter,
   cilAlignLeft,

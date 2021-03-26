@@ -49,7 +49,8 @@
     "react-modal": "^3.12.1",
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
-    "redux": "4.0.5"
+    "redux": "4.0.5",
+    "svg-png-converter": "0.0.9"
   },
   "devDependencies": {
     "auto-changelog": "~2.2.1",
